@@ -11,7 +11,6 @@ export const create = async (newNote: BaseINote): Promise<INote> => {
     notes[id] = {
         id: id,
         date: new Date(),
-        status: 'active',
         ...newNote,
     };
 
@@ -20,8 +19,7 @@ export const create = async (newNote: BaseINote): Promise<INote> => {
 
 export const update = async (
     id: number,
-    status: string,
-    noteUpdate: BaseINote
+    noteToUpdate: BaseINote
 ): Promise<INote | null> => {
     const note = await find(id);
 
@@ -29,7 +27,7 @@ export const update = async (
         return null;
     }
 
-    notes[id] = { id, date: new Date(), status, ...noteUpdate };
+    notes[id] = { id, date: new Date(), ...noteToUpdate };
 
     return notes[id];
 }

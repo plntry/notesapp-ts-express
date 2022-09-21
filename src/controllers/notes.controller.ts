@@ -42,7 +42,6 @@ export const createNote = async (req: Request, res: Response) => {
 
 export const updateNote = async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id, 10);
-    const status: string = req.params.status;
   
     try {
       const noteToUpdate: INote = req.body;
@@ -50,7 +49,7 @@ export const updateNote = async (req: Request, res: Response) => {
       const existingNote: INote = await NoteService.find(id);
   
       if (existingNote) {
-        const updatedNote = await NoteService.update(id, status, noteToUpdate);
+        const updatedNote = await NoteService.update(id, noteToUpdate);
         return res.status(200).json(updatedNote);
       }
   
