@@ -4,7 +4,7 @@ let notes: INotes = {
     0: {
         id: 0,
         date: new Date("2022-09-01T13:47:12.283Z"),
-        status: 'active',
+        status: 'archived',
         name: "Shopping list",
         content: "Tomatoes, bread",
         category: 'Task'

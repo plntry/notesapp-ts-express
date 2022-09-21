@@ -3,12 +3,15 @@ import * as NoteController from "../controllers/notes.controller";
 
 export const notesRouter = express.Router();
 
-notesRouter.get("/", NoteController.findAllNotes);
-
-notesRouter.get("/:id", NoteController.findOneNote);
-
 notesRouter.post("/", NoteController.createNote);
+
+notesRouter.delete("/:id", NoteController.deleteNote);
 
 notesRouter.patch("/:id", NoteController.updateNote);
 
-notesRouter.delete("/:id", NoteController.deleteNote);
+notesRouter.get("/stats", NoteController.getStats);
+
+notesRouter.get("/:id", NoteController.findOneNote);
+
+notesRouter.get("/", NoteController.findAllNotes);
+
