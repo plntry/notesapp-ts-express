@@ -27,7 +27,7 @@ export const update = async (
         return null;
     }
 
-    notes[id] = { id, date: new Date(), ...noteToUpdate };
+    Object.assign(note, noteToUpdate);
 
     return notes[id];
 }

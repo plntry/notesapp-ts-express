@@ -46,11 +46,12 @@ export const updateNote = async (req: Request, res: Response) => {
   
     try {
         const noteToUpdate: INote = req.body;
+        const changes = req.body;
 
         const existingNote: INote = await NoteService.find(id);
 
         if (existingNote) {
-            const updatedNote = await NoteService.update(id, noteToUpdate);
+            const updatedNote = await NoteService.update(id, changes);
             return res.status(200).json(updatedNote);
         }
 
