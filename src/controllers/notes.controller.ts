@@ -2,10 +2,11 @@ import { Request, Response } from "express";
 import { BaseINote, INote } from "../repositories/interfaces/INote";
 import * as NoteService from "../services/notesService";
 import { pushStatsToResult } from "../helpers/pushStatsToResultHelper";
+import { Note } from "../repositories/models/notes.model";
 
 export const findAllNotes = async (req: Request, res: Response) => {
     try {
-        const notes: INote[] = await NoteService.findAll();
+        const notes: Note[] = await Note.findAll();
   
         res.status(200).send(notes);
     } catch (e: any) {
@@ -14,10 +15,10 @@ export const findAllNotes = async (req: Request, res: Response) => {
 }
 
 export const findOneNote = async (req: Request, res: Response) => {
-        const id: number = parseInt(req.params.id, 10);
+        const { id } = req.params;
   
     try {
-        const note: INote = await NoteService.find(id);
+        const note: Note | null = await Note.findByPk(id);
     
         if (note) {
             return res.status(200).send(note);
@@ -31,33 +32,23 @@ export const findOneNote = async (req: Request, res: Response) => {
 
 export const createNote = async (req: Request, res: Response) => {
     try {
-        const note: BaseINote = req.body;
-        
-        const newNote = await NoteService.create(note);
+        const note: Note = await Note.create({ ...req.body });
   
-        res.status(201).json(newNote);
+        res.status(201).json(note);
     } catch (e: any) {
         res.status(500).send(e.message);
     }
 }
 
 export const updateNote = async (req: Request, res: Response) => {
-    const id: number = parseInt(req.params.id, 10);
+    const { id } = req.params;
   
     try {
-        const noteToUpdate: INote = req.body;
-        const changes = req.body;
-
-        const existingNote: INote = await NoteService.find(id);
-
-        if (existingNote) {
-            const updatedNote = await NoteService.update(id, changes);
-            return res.status(200).json(updatedNote);
-        }
-
-        const newNote = await NoteService.create(noteToUpdate);
-
-        res.status(201).json(newNote);
+        await Note.update({ ...req.body }, { where: { id } });
+        
+        const updatedNote: Note | null = await Note.findByPk(id);
+        
+        res.status(201).send(updatedNote);
     } catch (e: any) {
         res.status(500).send(e.message);
     }
@@ -65,9 +56,10 @@ export const updateNote = async (req: Request, res: Response) => {
 
 export const deleteNote = async (req: Request, res: Response) => {
     try {
-        const id: number = parseInt(req.params.id, 10);
-        await NoteService.remove(id);
-  
+        const { id } = req.params;
+
+        await Note.destroy({ where: { id } });
+
         res.sendStatus(204);
     } catch (e: any) {
         res.status(500).send(e.message);
@@ -77,7 +69,7 @@ export const deleteNote = async (req: Request, res: Response) => {
 export const getStats = async (req: Request, res: Response) => {
     try {
         let result:Array<object> = [];
-        const notes: INote[] = await NoteService.findAll();
+        const notes: Note[] = await Note.findAll();
         
         let categories = Array.from(new Set(notes.map(note => note.category)));      
 

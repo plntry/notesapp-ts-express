@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - '8080:80'
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=123456
+      - PGDATABASE=postgres
+      - PGHOST=db
+    depends_on:
+      - postgres
+  postgres:
+    image: 'postgres'
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+volumes:
+  pgdata1: {}

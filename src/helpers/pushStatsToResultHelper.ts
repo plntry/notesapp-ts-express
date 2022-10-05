@@ -1,6 +1,7 @@
 import { INote } from "../repositories/interfaces/INote";     
+import { Note } from "../repositories/models/notes.model";
 
-export function pushStatsToResult (result: Array<object>, notes: INote[], categories: Array<string>) {
+export function pushStatsToResult (result: Array<object>, notes: Note[], categories: Array<string>) {
     let activeNotesList = notes.filter(note => note.status === 'active');
     let archivedNotesList = notes.filter(note => note.status === 'archived');
         
